@@ -21,6 +21,6 @@ I encountered the problem in the iOS application I currently work on so I was lo
 
 Suggesting implementing `UNUserNotificationCenterDelegate.userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)` as a workaround. 
 
-And it worked! This method gets called every time a push notification arrives and the application is in the foreground running. 
+Moving my foreground push notification processing logic from `didReceiveRemoteNotification` to `willPresent notification` worked! This method gets called every time a push notification arrives and the application is in the foreground running. 
 
-When connected to the debugger, both `didReceiveRemoteNotification` and `userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)` get called, so when you implement this new method do not forget to remove all the logic from `didReceiveRemoteNotification` because it will get executed twice when Apple fixes the problem one day. 
+When connected to the debugger, or when the bug gets fixed, both `didReceiveRemoteNotification` and `willPresent notification` will get called for the same notification. Keep that in mind so you to not keep your logic in both places and do not process the same notification twice.
